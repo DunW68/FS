@@ -47,6 +47,12 @@ class PollsChoice(APIView):
 class ShowResults(APIView):
     serializer_class = ShowAnonDataSerializer
 
+    def get(self, request):
+        ip = request.META.get('REMOTE_ADDR')
+        data = AnonData.objects.filter(user=ip)
+        serializer = ShowResultsSerializer(data, many=True)
+        return Response(serializer.data)
+
     def post(self, request):
         ip = request.data['user']
         print(ip)
